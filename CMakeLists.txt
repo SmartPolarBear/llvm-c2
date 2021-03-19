@@ -4,4 +4,7 @@ project(llvm-basic)
 
 add_executable(basic)
 
+add_subdirectory(parser)
+add_subdirectory(scanner)
+
 target_sources(basic PRIVATE main.cc)
