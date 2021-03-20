@@ -1,10 +1,16 @@
-cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
 
 project(llvm-basic)
 
-add_executable(basic)
+find_package(BISON)
+find_package(FLEX)
 
-add_subdirectory(parser)
-add_subdirectory(scanner)
+FLEX_TARGET(Scanner scanner/scanner.l ${CMAKE_CURRENT_BINARY_DIR}/scanner.cc)
+BISON_TARGET(Parser parser/parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.cc)
 
-target_sources(basic PRIVATE main.cc)
+ADD_FLEX_BISON_DEPENDENCY(Scanner Parser)
+
+add_executable(basic
+        main.cc
+        ${BISON_MyParser_OUTPUTS}
+        ${FLEX_MyScanner_OUTPUTS})
