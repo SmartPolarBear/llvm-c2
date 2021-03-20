@@ -18,7 +18,7 @@ add_executable(basic
         ${BISON_Parser_OUTPUTS}
         ${FLEX_Scanner_OUTPUTS})
 
-set_property(TARGET basic PROPERTY CXX_STANDARD 23)
+set_property(TARGET basic PROPERTY CXX_STANDARD 20)
 
 add_subdirectory(parser)
 add_subdirectory(scanner)

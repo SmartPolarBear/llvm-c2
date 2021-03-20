@@ -1,13 +1,18 @@
 %option noyywrap
 %{
-#include <string>
+#include <cstdio>
+#include <cstdint>
+
+#include <iostream>
+#include <string_view>
+#include <memory>
 
 #include "types.h"
-
 #include "parser.hh"
 
-#define YY_DECL extern "C" int yylex()
+using namespace std;
 
+#define YY_DECL extern "C" int yylex()
 
 %}
 
@@ -18,7 +23,7 @@
 
 [0-9]+            { yylval.integer_value = std::stoi(yytext); return LINE; }
 
-\"[^\"\n]*\"        { yylval.string_value = strdup(yytext); return STRING; }
+\"[^\"\n]*\"      { yylval.string_value = new string{yytext}; return STRING; }
 
 PRINT            { return PRINT; }
 

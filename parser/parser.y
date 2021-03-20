@@ -5,10 +5,12 @@
 
 #include <iostream>
 #include <string_view>
+#include <memory>
 
 #include "types.h"
 
 using namespace std;
+
 
 extern "C" int yylex();
 extern "C" int yyparse();
@@ -22,7 +24,7 @@ void yyerror(const char *s);
 // token type definition
 %union {
     int64_t integer_value;
-    raw_string string_value;
+    std::string* string_value;
 }
 
 // constant tokens
@@ -48,6 +50,6 @@ stmt:
     | RUN            { cout << "> running..." << endl; }
 ;
 program:
-    PRINT STRING        { cout << ">\tPRINT " << $2 << endl; }
+    PRINT STRING        { cout << ">\tPRINT " << *($2) << endl; }
 ;
 %%

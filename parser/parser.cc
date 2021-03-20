@@ -2,6 +2,7 @@
 
 using namespace std;
 
-void yyerror(const char *s){
+void yyerror(const char *s)
+{
     cout << "Error: " << s << endl;
 }
