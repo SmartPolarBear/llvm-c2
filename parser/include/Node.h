@@ -4,7 +4,7 @@
 
 #include <llvm/IR/Value.h>
 
-namespace Parser
+namespace Parser::AST
 {
 
 class Node
