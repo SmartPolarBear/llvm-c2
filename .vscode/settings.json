@@ -20,5 +20,8 @@
                 }
             }
         ]
+    },
+    "files.associations": {
+        "string_view": "cpp"
     }
 }

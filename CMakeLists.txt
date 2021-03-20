@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
 
 project(llvm-basic)
 
-set(CXX_STANDARD_REQUIRED 20)
+set(CXX_STANDARD 20)
 
 
 find_package(BISON)
@@ -18,7 +18,15 @@ add_executable(basic
         ${BISON_Parser_OUTPUTS}
         ${FLEX_Scanner_OUTPUTS})
 
+set_property(TARGET basic PROPERTY CXX_STANDARD 23)
+
 add_subdirectory(parser)
 add_subdirectory(scanner)
 
-target_include_directories(basic PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+
+target_include_directories(basic 
+        PUBLIC ${CMAKE_CURRENT_BINARY_DIR}
+        PUBLIC include)
+
+target_link_options(basic 
+        PRIVATE -lc++)
