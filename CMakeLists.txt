@@ -8,8 +8,8 @@ set(CXX_STANDARD 20)
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
 
-FLEX_TARGET(Scanner scanner/scanner.l ${CMAKE_CURRENT_BINARY_DIR}/scanner.cc)
-BISON_TARGET(Parser parser/parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.cc)
+FLEX_TARGET(Scanner scanner/Scanner.l ${CMAKE_CURRENT_BINARY_DIR}/Scanner.cc)
+BISON_TARGET(Parser parser/Parser.y ${CMAKE_CURRENT_BINARY_DIR}/Parser.cc)
 
 ADD_FLEX_BISON_DEPENDENCY(Scanner Parser)
 
