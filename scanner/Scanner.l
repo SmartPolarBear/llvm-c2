@@ -7,7 +7,8 @@
 #include <string_view>
 #include <memory>
 
-#include "types.h"
+#include "Types.h"
+
 #include "parser.hh"
 
 using namespace std;

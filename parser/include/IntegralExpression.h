@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Node.h"
 #include <cstdint>
 
@@ -9,6 +10,7 @@ class IntegralExpression : public Node
   public:
     explicit IntegralExpression(int64_t val) : value_(val)
     {
+        
     }
 
     [[nodiscard]] llvm::Value *codegen() override;

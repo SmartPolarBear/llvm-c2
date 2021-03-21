@@ -7,7 +7,7 @@
 #include <string_view>
 #include <memory>
 
-#include "types.h"
+#include "Types.h"
 
 using namespace std;
 
@@ -31,6 +31,7 @@ void yyerror(const char *s);
 %token PRINT
 %token RUN
 %token ENDL
+%token SUB
 
 // terminal symbols
 %token <integer_value> LINE
