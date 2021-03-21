@@ -1,17 +1,10 @@
 %option noyywrap
 %{
-#include <cstdio>
-#include <cstdint>
+#define BISONLEXFILE
+#include "BisonFlexCommon.h"
+#undef BISONLEXFILE
 
-#include <iostream>
-#include <string_view>
-#include <memory>
-
-#include "Types.h"
-
-#include "parser.hh"
-
-using namespace std;
+#include "Parser.hh"
 
 #define YY_DECL extern "C" int yylex()
 
@@ -20,16 +13,48 @@ using namespace std;
 
 %%
 
-[ \t]+    ;        // skip white space
+[ \t]+                  ;        // skip white space
 
-[0-9]+            { yylval.integer_value = std::stoi(yytext); return LINE; }
+[a-zA-Z_][a-zA-Z0-9_]*  { yylval.string_value = new string{yytext}; return TIDENTIFIER;}
 
-\"[^\"\n]*\"      { yylval.string_value = new string{yytext}; return STRING; }
+[0-9]+                  { yylval.string_value = new string{yytext}; return TINTEGER; }
 
-PRINT            { return PRINT; }
+[0-9]+.[0-9]*           { yylval.string_value = new string{yytext}; return TDOUBLE; }
 
-RUN            { return RUN; }
+\"[^\"\n]*\"            { yylval.string_value = new string{yytext}; return TSTRING; }
 
-\n            return ENDL;
+"="                     { return yylval.token_value = TEQL;}
+
+"=="                    { return yylval.token_value = TCEQ;}
+
+"!="                    { return yylval.token_value = TCNE;}
+
+"<"                     { return yylval.token_value = TCLT;}
+
+"<="                    { return yylval.token_value = TCLE;}
+
+">"                     { return yylval.token_value = TCGT;}
+
+">="                    { return yylval.token_value = TCGE;}
+
+"("                     { return yylval.token_value = TLPAREN;}
+
+")"                     { return yylval.token_value = TRPAREN;}
+
+"."                     { return yylval.token_value = TDOT;}
+
+","                     { return yylval.token_value = TCOMMA;}
+
+"+"                     { return yylval.token_value = TPLUS;}
+
+"-"                     { return yylval.token_value = TMINUS;}
+
+"*"                     { return yylval.token_value = TMUL;}
+
+"/"                     { return yylval.token_value = TDIV;}
+
+\n                     { return ENDL;}
+
+.                      { std::cout << "Error: Unknown token "<< yytext << std::endl; yyterminate();}}
 
 %%

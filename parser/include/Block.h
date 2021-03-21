@@ -2,21 +2,23 @@
 
 #include "Node.h"
 #include <cstdint>
-#include <string>
+#include <vector>
 
 namespace Parser::AST
 {
-class VariableExpression : public ExpressionNode
+class Block : public Node
 {
   public:
-    explicit VariableExpression(std::string &&str) : name_(std::move(str))
+    Block() = default;
+
+    std::vector<Node*> &statements()
     {
+        return statements_;
     }
 
     [[nodiscard]] llvm::Value *codegen() override;
 
   private:
-    std::string name_{""};
+    std::vector<Node*> statements_{};
 };
-
 } // namespace Parser::AST

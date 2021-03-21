@@ -17,4 +17,12 @@ class Node
     virtual llvm::Value *codegen() = 0;
 };
 
-} // namespace Parser
+class ExpressionNode : public Node
+{
+};
+
+class StatementNode : public Node
+{
+};
+
+} // namespace Parser::AST

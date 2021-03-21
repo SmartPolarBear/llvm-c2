@@ -5,7 +5,7 @@
 
 namespace Parser::AST
 {
-class IntegralExpression : public Node
+class IntegralExpression : public ExpressionNode
 {
   public:
     explicit IntegralExpression(int64_t val) : value_(val)
