@@ -4,7 +4,8 @@ target_sources(basic
     PRIVATE Parser.cc
     PRIVATE Block.cc
     PRIVATE IntegralExpression.cc
-    PRIVATE VariableExpression.cc)
+    PRIVATE IdentifierExpression.cc
+    PRIVATE VariableDeclarationStatement.cc)
 
 target_include_directories(basic
     PRIVATE include)

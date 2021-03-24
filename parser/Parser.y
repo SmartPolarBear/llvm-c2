@@ -49,7 +49,7 @@ void yyerror(const char *s);
 %start program
 
 %% /* Grammar rules and actions follow */
-program : stmts { programBlock = $1; }
+program : stmts { root = $1; }
         ;
         
 stmts : stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
@@ -64,8 +64,8 @@ block : TLBRACE stmts TRBRACE { $$ = $2; }
       | TLBRACE TRBRACE { $$ = new NBlock(); }
       ;
 
-var_decl : ident ident { $$ = new NVariableDeclaration(*$1, *$2); }
-         | ident ident TEQL expr { $$ = new NVariableDeclaration(*$1, *$2, $4); }
+var_decl : ident ident { $$ = new VariableDeclarationStatement($1, $2); }
+         | ident ident TEQL expr { $$ = new VariableDeclarationStatement($1, $2, $4); }
          ;
         
 func_decl : ident ident TLPAREN func_decl_args TRPAREN block 
@@ -80,7 +80,7 @@ func_decl_args : /*blank*/  { $$ = new VariableList(); }
 ident : TIDENTIFIER { $$ = new NIdentifier(*$1); delete $1; }
       ;
 
-numeric : TINTEGER { $$ = new NInteger(atol($1->c_str())); delete $1; }
+numeric : TINTEGER { $$ = new IntegralExpression(atol($1->c_str())); delete $1; }
         | TDOUBLE { $$ = new NDouble(atof($1->c_str())); delete $1; }
         | TDOUBLE { $$ = new NDouble(atof($1->c_str())); delete $1; }
         ;

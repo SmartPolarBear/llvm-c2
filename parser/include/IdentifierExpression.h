@@ -2,20 +2,20 @@
 
 #include "Node.h"
 #include <cstdint>
+#include <string>
 
 namespace Parser::AST
 {
-class IntegralExpression : public ExpressionNode
+class IdentifierExpression : public ExpressionNode
 {
   public:
-    explicit IntegralExpression(int64_t val) : value_(val)
+    explicit IdentifierExpression(const std::string &name) : name_(name)
     {
-        
     }
 
     [[nodiscard]] virtual llvm::Value *codegen() override;
 
   private:
-    int64_t value_;
+    std::string name_;
 };
 } // namespace Parser::AST
