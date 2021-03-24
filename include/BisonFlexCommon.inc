@@ -14,8 +14,13 @@
 #include "Types.h"
 
 #include "Node.h"
-#include "Block.h"
 
+#include "Block.h"
+#include "ExpressionStatement.h"
+#include "IdentifierExpression.h"
+#include "IntegralExpression.h"
+#include "VariableDeclarationStatement.h" 
+#include "FunctionDeclarationStatement.h"
 
 using namespace std;
 

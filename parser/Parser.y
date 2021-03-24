@@ -28,6 +28,7 @@ void yyerror(const char *s);
     ExpressionNode *expr;
     StatementNode *stmt;
     Block *block;
+    IdentiferExpression *ident;
 }
 
 %token <string_value> TSTRING TIDENTIFIER
@@ -52,12 +53,12 @@ void yyerror(const char *s);
 program : stmts { root = $1; }
         ;
         
-stmts : stmt { $$ = new NBlock(); $$->statements.push_back($<stmt>1); }
+stmts : stmt { $$ = new Block(); $$->statements.push_back($<stmt>1); }
       | stmts stmt { $1->statements.push_back($<stmt>2); }
       ;
 
 stmt : var_decl | func_decl
-     | expr { $$ = new NExpressionStatement(*$1); }
+     | expr { $$ = new ExpressionStatement($1); }
      ;
 
 block : TLBRACE stmts TRBRACE { $$ = $2; }
@@ -69,15 +70,15 @@ var_decl : ident ident { $$ = new VariableDeclarationStatement($1, $2); }
          ;
         
 func_decl : ident ident TLPAREN func_decl_args TRPAREN block 
-            { $$ = new NFunctionDeclaration(*$1, *$2, *$4, *$6); delete $4; }
+            { $$ = new FunctionDeclarationStatement($1, $2, std::move($4), $6);  }
           ;
     
-func_decl_args : /*blank*/  { $$ = new VariableList(); }
-          | var_decl { $$ = new VariableList(); $$->push_back($<var_decl>1); }
-          | func_decl_args TCOMMA var_decl { $1->push_back($<var_decl>3); }
+func_decl_args : /*blank*/  { $$ = FunctionDeclarationStatement::ArgListType{}; }
+          | var_decl { $$ =  FunctionDeclarationStatement::ArgListType{}; $$.push_back($<var_decl>1); }
+          | func_decl_args TCOMMA var_decl { $1.push_back($<var_decl>3); }
           ;
 
-ident : TIDENTIFIER { $$ = new NIdentifier(*$1); delete $1; }
+ident : TIDENTIFIER { $$ = new IdentifierExpression($1);}
       ;
 
 numeric : TINTEGER { $$ = new IntegralExpression(atol($1->c_str())); delete $1; }
@@ -89,7 +90,7 @@ expr : ident TEQL expr { $$ = new NAssignment(*$<ident>1, *$3); }
      | ident TLPAREN call_args TRPAREN { $$ = new NMethodCall(*$1, *$3); delete $3; }
      | ident { $<ident>$ = $1; }
      | numeric
-     | expr comparison expr { $$ = new NBinaryOperator(*$1, $2, *$3); }
+     | expr comp expr { $$ = new NBinaryOperator(*$1, $2, *$3); }
      | TLPAREN expr TRPAREN { $$ = $2; }
      ;
     
@@ -98,7 +99,7 @@ call_args : /*blank*/  { $$ = new ExpressionList(); }
           | call_args TCOMMA expr  { $1->push_back($3); }
           ;
 
-comparison : TCEQ | TCNE | TCLT | TCLE | TCGT | TCGE 
-           | TPLUS | TMINUS | TMUL | TDIV
-           ;
+comp : TCEQ | TCNE | TCLT | TCLE | TCGT | TCGE 
+      | TPLUS | TMINUS | TMUL | TDIV
+      ;
 %%
