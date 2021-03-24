@@ -96,7 +96,8 @@
         "__tuple": "cpp",
         "ios": "cpp",
         "locale": "cpp",
-        "queue": "cpp"
+        "queue": "cpp",
+        "BisonFlexCommon.inc" : "cpp"
     },
     "C_Cpp.clang_format_path": "/usr/bin/clang-format",
     "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
