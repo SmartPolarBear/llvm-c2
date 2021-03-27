@@ -11,7 +11,7 @@ namespace Parser::AST
 class BinaryOperatorExpression : public ExpressionNode
 {
   public:
-    explicit BinaryOperatorExpression(IdentifierExpression *lhs, int op, IdentifierExpression *rhs)
+    explicit BinaryOperatorExpression(ExpressionNode *lhs, int op, ExpressionNode *rhs)
         : lhs_(lhs), rhs_(rhs), op_(op)
     {
     }
@@ -20,7 +20,7 @@ class BinaryOperatorExpression : public ExpressionNode
 
   private:
     int op_;
-    IdentifierExpression *lhs_;
-    IdentifierExpression *rhs_;
+    ExpressionNode *lhs_;
+    ExpressionNode *rhs_;
 };
 } // namespace Parser::AST

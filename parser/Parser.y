@@ -27,6 +27,7 @@ void yyerror(const char *s);
 
     ExpressionNode *expr;
     StatementNode *stmt;
+    VariableDeclarationStatement *var_decl;
     Block *block;
     IdentifierExpression *ident;
 
@@ -77,7 +78,7 @@ var_decl : ident ident { $$ = new VariableDeclarationStatement($1, $2); }
          ;
         
 func_decl : ident ident TLPAREN func_decl_args TRPAREN block 
-            { $$ = new FunctionDeclarationStatement($1, $2, std::move(*$4), $6); delete $4; }
+            { $$ = new FunctionDeclarationStatement($1, $2, $6,std::move(*$4)); delete $4; }
           ;
     
 func_decl_args : /*blank*/  { $$ = new FunctionDeclarationStatement::ArgListType{}; }
@@ -85,7 +86,7 @@ func_decl_args : /*blank*/  { $$ = new FunctionDeclarationStatement::ArgListType
           | func_decl_args TCOMMA var_decl { $1->push_back($<var_decl>3); }
           ;
 
-ident : TIDENTIFIER { $$ = new IdentifierExpression($1);}
+ident : TIDENTIFIER { $$ = new IdentifierExpression(*$1); delete $1;}
       ;
 
 numeric : TINTEGER { $$ = new IntegralExpression($1);}
@@ -93,10 +94,10 @@ numeric : TINTEGER { $$ = new IntegralExpression($1);}
         | TUNSIGNED { $$ = new UnsignedExpression($1); }
         ;
     
-expr : numeric
-     | ident TEQL expr { $$ = new AssignmentExpression($<ident>1, $3); }
+expr : ident TEQL expr { $$ = new AssignmentExpression($<ident>1, $3); }
      | ident TLPAREN call_args TRPAREN { $$ = new FunctionCallingExpression($1, std::move(*$3));delete $3;  }
      | ident { $<ident>$ = $1; }
+     | numeric
      | expr comp expr { $$ = new BinaryOperatorExpression($1, $2, $3); }
      | TLPAREN expr TRPAREN { $$ = $2; }
      ;
