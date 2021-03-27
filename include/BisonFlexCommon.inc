@@ -18,9 +18,12 @@
 #include "Block.h"
 #include "ExpressionStatement.h"
 #include "IdentifierExpression.h"
-#include "IntegralExpression.h"
+#include "NumericExpressions.h"
+#include "AssignmentExpression.h"
+#include "BinaryOperatorExpression.h"
 #include "VariableDeclarationStatement.h" 
 #include "FunctionDeclarationStatement.h"
+#include "FunctionCallingExpression.h"
 
 using namespace std;
 

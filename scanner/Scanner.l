@@ -15,7 +15,7 @@
 
 [ \t\n]+                  ;        // skip white space
 
-[a-zA-Z_][a-zA-Z0-9_]*  {yylval.string_value=new std::string{yytext,yyleng}; return TIDENTIFIER;}
+[a-zA-Z_][a-zA-Z0-9_]*  {yylval.string_value=new std::string{yytext,static_cast<std::string::size_type>(yyleng)}; return TIDENTIFIER;}
 
 [0-9]+.[0-9]*          { yylval.floating_value=std::stold(yytext);return TDOUBLE;}
 
@@ -23,7 +23,7 @@
 
 [0-9]+                 { yylval.integer_value=std::stoll(yytext); return TINTEGER;}
 
-"="                     return yylval.token_value=TEQUAL;
+"="                     return yylval.token_value=TEQL;
 
 "=="                    return yylval.token_value=TCEQ;
 
@@ -57,6 +57,6 @@
 
 "/"                     return yylval.token_value=TDIV;
 
-.                      { std::cout << "Error: Unknown token "<< yytext << std::endl; yyterminate(;}
+.                      { std::cout << "Error: Unknown token "<< yytext << std::endl; yyterminate();}
 
 %%

@@ -36,7 +36,7 @@ class FunctionDeclarationStatement : public StatementNode
     IdentifierExpression *id_{nullptr};
     Block *block_{nullptr};
 
-    mutable args_{};
+    mutable ArgListType args_{};
 };
 
 } // namespace Parser::AST

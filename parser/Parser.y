@@ -28,7 +28,10 @@ void yyerror(const char *s);
     ExpressionNode *expr;
     StatementNode *stmt;
     Block *block;
-    IdentiferExpression *ident;
+    IdentifierExpression *ident;
+
+    FunctionDeclarationStatement::ArgListType *func_decl_args;
+    FunctionCallingExpression::ArgListType *func_calling_args;
 }
 
 %token <string_value> TSTRING TIDENTIFIER
@@ -43,9 +46,13 @@ void yyerror(const char *s);
 %left TPLUS TMINUS
 %left TMUL TDIV
 
-%type <stmt> stmt var_decl
 %type <ident> ident
+%type <expr> numeric expr 
+%type <func_decl_args> func_decl_args
+%type <func_calling_args> call_args
 %type <block> program stmts block
+%type <stmt> stmt var_decl func_decl
+%type <token_value> comp
 
 %start program
 
@@ -53,8 +60,8 @@ void yyerror(const char *s);
 program : stmts { root = $1; }
         ;
         
-stmts : stmt { $$ = new Block(); $$->statements.push_back($<stmt>1); }
-      | stmts stmt { $1->statements.push_back($<stmt>2); }
+stmts : stmt { $$ = new Block(); $$->statements().push_back($<stmt>1); }
+      | stmts stmt { $1->statements().push_back($<stmt>2); }
       ;
 
 stmt : var_decl | func_decl
@@ -62,7 +69,7 @@ stmt : var_decl | func_decl
      ;
 
 block : TLBRACE stmts TRBRACE { $$ = $2; }
-      | TLBRACE TRBRACE { $$ = new NBlock(); }
+      | TLBRACE TRBRACE { $$ = new Block(); }
       ;
 
 var_decl : ident ident { $$ = new VariableDeclarationStatement($1, $2); }
@@ -70,32 +77,32 @@ var_decl : ident ident { $$ = new VariableDeclarationStatement($1, $2); }
          ;
         
 func_decl : ident ident TLPAREN func_decl_args TRPAREN block 
-            { $$ = new FunctionDeclarationStatement($1, $2, std::move($4), $6);  }
+            { $$ = new FunctionDeclarationStatement($1, $2, std::move(*$4), $6); delete $4; }
           ;
     
-func_decl_args : /*blank*/  { $$ = FunctionDeclarationStatement::ArgListType{}; }
-          | var_decl { $$ =  FunctionDeclarationStatement::ArgListType{}; $$.push_back($<var_decl>1); }
-          | func_decl_args TCOMMA var_decl { $1.push_back($<var_decl>3); }
+func_decl_args : /*blank*/  { $$ = new FunctionDeclarationStatement::ArgListType{}; }
+          | var_decl { $$ = new  FunctionDeclarationStatement::ArgListType{}; $$->push_back($<var_decl>1); }
+          | func_decl_args TCOMMA var_decl { $1->push_back($<var_decl>3); }
           ;
 
 ident : TIDENTIFIER { $$ = new IdentifierExpression($1);}
       ;
 
-numeric : TINTEGER { $$ = new IntegralExpression(atol($1->c_str())); delete $1; }
-        | TDOUBLE { $$ = new NDouble(atof($1->c_str())); delete $1; }
-        | TDOUBLE { $$ = new NDouble(atof($1->c_str())); delete $1; }
+numeric : TINTEGER { $$ = new IntegralExpression($1);}
+        | TDOUBLE { $$ = new DoubleExpression($1);}
+        | TUNSIGNED { $$ = new UnsignedExpression($1); }
         ;
     
-expr : ident TEQL expr { $$ = new NAssignment(*$<ident>1, *$3); }
-     | ident TLPAREN call_args TRPAREN { $$ = new NMethodCall(*$1, *$3); delete $3; }
+expr : numeric
+     | ident TEQL expr { $$ = new AssignmentExpression($<ident>1, $3); }
+     | ident TLPAREN call_args TRPAREN { $$ = new FunctionCallingExpression($1, std::move(*$3));delete $3;  }
      | ident { $<ident>$ = $1; }
-     | numeric
-     | expr comp expr { $$ = new NBinaryOperator(*$1, $2, *$3); }
+     | expr comp expr { $$ = new BinaryOperatorExpression($1, $2, $3); }
      | TLPAREN expr TRPAREN { $$ = $2; }
      ;
     
-call_args : /*blank*/  { $$ = new ExpressionList(); }
-          | expr { $$ = new ExpressionList(); $$->push_back($1); }
+call_args : /*blank*/ { $$ = new FunctionCallingExpression::ArgListType(); }
+          | expr { $$ = new FunctionCallingExpression::ArgListType(); $$->push_back($1); }
           | call_args TCOMMA expr  { $1->push_back($3); }
           ;
 
