@@ -5,12 +5,7 @@
 #include "BisonFlexCommon.inc"
 #undef BISONLEXFILE
 
-extern "C" int yylex();
-extern "C" int yyparse();
-
 extern "C" FILE *yyin;
-
-Block *root = nullptr;
 
 void yyerror(const char *s);
 
@@ -58,7 +53,7 @@ void yyerror(const char *s);
 %start program
 
 %% /* Grammar rules and actions follow */
-program : stmts { root = $1; }
+program : stmts { Program::Instance().SetRoot($1); }
         ;
         
 stmts : stmt { $$ = new Block(); $$->statements().push_back($<stmt>1); }
@@ -82,7 +77,7 @@ func_decl : ident ident TLPAREN func_decl_args TRPAREN block
           ;
     
 func_decl_args : /*blank*/  { $$ = new FunctionDeclarationStatement::ArgListType{}; }
-          | var_decl { $$ = new  FunctionDeclarationStatement::ArgListType{}; $$->push_back($<var_decl>1); }
+          | var_decl { $$ = new FunctionDeclarationStatement::ArgListType{}; $$->push_back($<var_decl>1); }
           | func_decl_args TCOMMA var_decl { $1->push_back($<var_decl>3); }
           ;
 
@@ -95,7 +90,7 @@ numeric : TINTEGER { $$ = new IntegralExpression($1);}
         ;
     
 expr : ident TEQL expr { $$ = new AssignmentExpression($<ident>1, $3); }
-     | ident TLPAREN call_args TRPAREN { $$ = new FunctionCallingExpression($1, std::move(*$3));delete $3;  }
+     | ident TLPAREN call_args TRPAREN { $$ = new FunctionCallingExpression($1, std::move(*$3));delete $3;}
      | ident { $<ident>$ = $1; }
      | numeric
      | expr comp expr { $$ = new BinaryOperatorExpression($1, $2, $3); }
@@ -110,4 +105,5 @@ call_args : /*blank*/ { $$ = new FunctionCallingExpression::ArgListType(); }
 comp : TCEQ | TCNE | TCLT | TCLE | TCGT | TCGE 
       | TPLUS | TMINUS | TMUL | TDIV
       ;
+
 %%

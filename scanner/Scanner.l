@@ -1,12 +1,11 @@
 %option noyywrap
 %{
+
 #define BISONLEXFILE
 #include "BisonFlexCommon.inc"
 #undef BISONLEXFILE
 
 #include "Parser.hh"
-
-#define YY_DECL extern "C" int yylex()
 
 %}
 
@@ -15,7 +14,7 @@
 
 [ \t\n]+                  ;        // skip white space
 
-[a-zA-Z_][a-zA-Z0-9_]*  {yylval.string_value=new std::string{yytext,static_cast<std::string::size_type>(yyleng)}; return TIDENTIFIER;}
+[a-zA-Z_][a-zA-Z0-9_]* {yylval.string_value=new std::string{yytext,static_cast<std::string::size_type>(yyleng)}; return TIDENTIFIER;}
 
 [0-9]+[Uu]             { yylval.uint_value=std::stoull(yytext); return TUNSIGNED;}
 

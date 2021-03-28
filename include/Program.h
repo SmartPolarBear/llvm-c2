@@ -2,16 +2,24 @@
 #include "Singleton.h"
 
 #include "Node.h"
+#include "Block.h"
 
 #include <vector>
 #include <memory>
 
-class Program : Singleton<Program>
+class Program : public Singleton<Program>
 {
   public:
-    void add(std::unique_ptr<Parser::AST::Node> statement);
+    Program() = default;
+    ~Program() = default;
+
+    void SetRoot(Parser::AST::Block *root)
+    {
+        root_ = root;
+    }
+
+    
 
   private:
-    std::vector<std::unique_ptr<Parser::AST::Node>> statements_;
+    Parser::AST::Block *root_;
 };
-

@@ -13,8 +13,9 @@
 
 #include "Types.h"
 
-#include "Node.h"
+#include "Program.h"
 
+#include "Node.h"
 #include "Block.h"
 #include "ExpressionStatement.h"
 #include "IdentifierExpression.h"
@@ -29,3 +30,6 @@ using namespace std;
 
 using namespace llvm;
 using namespace Parser::AST;
+
+extern "C" int yylex();
+extern "C" int yyparse();
