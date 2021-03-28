@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
 
-target_sources(basic 
+target_sources(safec 
     PRIVATE Parser.cc
     PRIVATE Block.cc
     PRIVATE NumericExpressions.cc
@@ -12,5 +12,5 @@ target_sources(basic
     PRIVATE FunctionDeclarationStatement.cc
     PRIVATE VariableDeclarationStatement.cc)
 
-target_include_directories(basic
+target_include_directories(safec
     PRIVATE include)
