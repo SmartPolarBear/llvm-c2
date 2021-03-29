@@ -34,7 +34,12 @@ add_executable(safec
 
 set_property(TARGET safec PROPERTY CXX_STANDARD 20)
 
+add_dependencies(safec fmtlib_build)
+
 add_subdirectory(external)
+
+target_link_directories(safec PRIVATE fmt::fmt)
+
 
 add_subdirectory(parser)
 add_subdirectory(scanner)

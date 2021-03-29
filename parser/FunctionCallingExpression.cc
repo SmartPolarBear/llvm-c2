@@ -16,5 +16,20 @@ llvm::Value *FunctionCallingExpression::codegen()
         CLI::Logger.Instance().Error("Unknown function reference.");
     }
 
-    return nullptr;
+    if (callee->arg_size() != arglist_.size())
+    {
+        CLI::Logger.Instance().Error("Incorrect argument count.");
+    }
+
+    std::vector<Value *> args_values{};
+    for (const auto &arg : arglist_)
+    {
+        args_values.push_back(arg->codegen());
+        if (!args_values.back())
+        {
+            return nullptr;
+        }
+    }
+
+    return Program::Instance().IRBuilder()->CreateCall(callee, args_values, "calltmp");
 }
