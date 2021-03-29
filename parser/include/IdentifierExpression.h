@@ -13,6 +13,11 @@ class IdentifierExpression : public ExpressionNode
     {
     }
 
+    [[nodiscard]] std::string Name() const
+    {
+        return name_;
+    }
+
     [[nodiscard]] virtual llvm::Value *codegen() override;
 
   private:

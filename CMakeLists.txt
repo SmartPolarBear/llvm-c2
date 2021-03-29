@@ -34,8 +34,11 @@ add_executable(safec
 
 set_property(TARGET safec PROPERTY CXX_STANDARD 20)
 
+add_subdirectory(external)
+
 add_subdirectory(parser)
 add_subdirectory(scanner)
+add_subdirectory(cli)
 
 target_include_directories(safec 
         PUBLIC ${CMAKE_CURRENT_BINARY_DIR}

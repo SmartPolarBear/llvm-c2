@@ -33,6 +33,21 @@ class Program : public Singleton<Program>
         root_ = root;
     }
 
+    [[nodiscard]] llvm::LLVMContext* Context()
+    {
+        return context_.get();
+    }
+
+    [[nodiscard]] llvm::Module* Module()
+    {
+        return module_.get();
+    }
+
+    [[nodiscard]] llvm::IRBuilder<>* IRBuilder()
+    {
+        return ir_builder_.get();
+    }
+
     void Generate();
 
   private:
@@ -42,3 +57,5 @@ class Program : public Singleton<Program>
     std::unique_ptr<llvm::Module> module_;
     std::unique_ptr<llvm::IRBuilder<>> ir_builder_;
 };
+
+
