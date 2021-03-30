@@ -34,12 +34,12 @@ add_executable(safec
 
 set_property(TARGET safec PROPERTY CXX_STANDARD 20)
 
-add_dependencies(safec fmtlib_build)
+find_package(fmt)
 
 add_subdirectory(external)
 
-target_link_directories(safec PRIVATE fmt::fmt)
-
+target_include_directories(safec 
+        PRIVATE "${CMAKE_BINARY_DIR}/external/third_party_root/include")
 
 add_subdirectory(parser)
 add_subdirectory(scanner)
@@ -50,11 +50,11 @@ target_include_directories(safec
         PUBLIC ${LLVM_INCLUDE_DIRS}
         PUBLIC include)
 
-
 target_compile_definitions(safec
         PUBLIC ${LLVM_DEFINITIONS})
 
 target_link_libraries(safec
+        PRIVATE fmt::fmt
         PUBLIC ${llvm_libs})
 
 target_link_options(safec 

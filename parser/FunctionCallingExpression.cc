@@ -13,12 +13,12 @@ llvm::Value *FunctionCallingExpression::codegen()
 
     if (!callee)
     {
-        CLI::Logger.Instance().Error("Unknown function reference.");
+        CLI::Logger::Instance().Error("Unknown function reference.");
     }
 
     if (callee->arg_size() != arglist_.size())
     {
-        CLI::Logger.Instance().Error("Incorrect argument count.");
+        CLI::Logger::Instance().Error("Incorrect argument count.");
     }
 
     std::vector<Value *> args_values{};

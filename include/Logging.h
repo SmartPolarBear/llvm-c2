@@ -9,7 +9,7 @@
 
 namespace CLI
 {
-class Logger : Singleton<Logger>
+class Logger : public Singleton<Logger>
 {
   public:
     void Error(std::string_view sv)
