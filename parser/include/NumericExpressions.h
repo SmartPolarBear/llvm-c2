@@ -9,42 +9,45 @@ namespace Parser::AST
 class IntegralExpression : public ExpressionNode
 {
   public:
-    explicit IntegralExpression(int64_t val) : value_(val)
+    using IntegralType = int64_t;
+
+    explicit IntegralExpression(IntegralType val) : value_(val)
     {
-        
     }
 
     [[nodiscard]] virtual llvm::Value *codegen() override;
 
   private:
-    int64_t value_;
+    IntegralType value_;
 };
 
 class DoubleExpression : public ExpressionNode
 {
   public:
-    explicit DoubleExpression(long double val) : value_(val)
+    using DoubleType = double;
+
+    explicit DoubleExpression(DoubleType val) : value_(val)
     {
-        
     }
 
     [[nodiscard]] virtual llvm::Value *codegen() override;
 
   private:
-    long double value_;
+    DoubleType value_;
 };
 
 class UnsignedExpression : public ExpressionNode
 {
   public:
-    explicit UnsignedExpression(uint64_t val) : value_(val)
+    using UnsignedType = uint64_t;
+
+    explicit UnsignedExpression(UnsignedType val) : value_(val)
     {
-        
     }
 
     [[nodiscard]] virtual llvm::Value *codegen() override;
 
   private:
-    uint64_t value_;
+    UnsignedType value_;
 };
 } // namespace Parser::AST

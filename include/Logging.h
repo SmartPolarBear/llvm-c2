@@ -19,10 +19,12 @@ class Logger : public Singleton<Logger>
 
     void Warning(std::string_view sv)
     {
+        fmt::print(fg(fmt::color::yellow), "WARNING: {}", sv);
     }
 
     void Info(std::string_view sv)
     {
+        fmt::print("WARNING: {}", sv);
     }
 };
 } // namespace CLI

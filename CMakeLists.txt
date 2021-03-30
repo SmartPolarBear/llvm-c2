@@ -4,7 +4,6 @@ project(llvm-safec)
 
 set(CXX_STANDARD 20)
 
-
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
 
@@ -34,12 +33,11 @@ add_executable(safec
 
 set_property(TARGET safec PROPERTY CXX_STANDARD 20)
 
+# FMTLIB for error message formating
 find_package(fmt)
 
+# External libraries
 add_subdirectory(external)
-
-target_include_directories(safec 
-        PRIVATE "${CMAKE_BINARY_DIR}/external/third_party_root/include")
 
 add_subdirectory(parser)
 add_subdirectory(scanner)
