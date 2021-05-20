@@ -12,6 +12,8 @@
 
 #include <vector>
 #include <memory>
+#include <map>
+#include <string>
 
 class Program : public Singleton<Program>
 {
@@ -48,6 +50,11 @@ class Program : public Singleton<Program>
         return ir_builder_.get();
     }
 
+    [[nodiscard]] auto &NamedValues()
+    {
+        return named_values_;
+    }
+
     void Generate();
 
   private:
@@ -56,6 +63,6 @@ class Program : public Singleton<Program>
     std::unique_ptr<llvm::LLVMContext> context_;
     std::unique_ptr<llvm::Module> module_;
     std::unique_ptr<llvm::IRBuilder<>> ir_builder_;
+
+    std::unordered_map<std::string, llvm::Value *> named_values_;
 };
-
-

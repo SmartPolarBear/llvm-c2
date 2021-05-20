@@ -6,13 +6,15 @@
 #include <cstdint>
 #include <string>
 
+
 namespace Parser::AST
 {
+
+
 class BinaryOperatorExpression : public ExpressionNode
 {
   public:
-    explicit BinaryOperatorExpression(ExpressionNode *lhs, int op, ExpressionNode *rhs)
-        : lhs_(lhs), rhs_(rhs), op_(op)
+    explicit BinaryOperatorExpression(ExpressionNode *lhs, int op, ExpressionNode *rhs) : lhs_(lhs), rhs_(rhs), op_(op)
     {
     }
 
